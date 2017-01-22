@@ -14,7 +14,7 @@ curl -X PUT <host>:<port>/admin/log?level=<NONE|FATAL|ERROR|WARN|INFO|DEBUG>
 To retrieve the log level:
 
 ```
-curl <host>:<port>:/admin/log
+curl <host>:<port>/admin/log
 ```
 
 which response follows the following pattern:

@@ -145,3 +145,34 @@ The packages are basically the same described for RedHat/CentOS above, except th
 Install Google Test and Google Mock version 1.5 directly from sources.
 
 The version of lcov that comes with Debian 7.0 (1.9) has a bug (see https://bugs.launchpad.net/ubuntu/+source/lcov/+bug/1163758). Install lcov 1.10 from sources.
+
+## Mac OS X 10.12
+
+* Install XCode and brew
+* You may need some of the following brew packages, which I (Pekka N) had installed when I started:
+   * autoconf, automake, coreutils, dirmngr, emacs-mac, findutils, gnu-sed, gnupg2, gpg-agent, libassuan, libgcrypt, libgpg-error, libksba, libusb, libusb-compat, nmap, node, openssl, pcre, pinentry, pkg-config, pngcrush, pth, stlink, wget
+   * If you notice that you need one of those, remote it from the list above and add to the requirements below
+* You need the following brew packages:
+
+        brew install cmake
+        brew install scons
+        brew install boost
+        brew install libmicrohttpd
+        brew install rapidjson
+        brew install gnutls
+
+Please note that `libcurl` 7.9.6 is included in Mac OS X, and it
+appears to be sufficient.  But beware of security issues.
+
+* Install the Mongo Driver from source:
+
+        wget https://github.com/mongodb/mongo-cxx-driver/archive/legacy-1.0.7.tar.gz
+        tar xfvz legacy-1.0.7.tar.gz
+        cd mongo-cxx-driver-legacy-1.0.7
+        scons
+        scons install --prefix=/usr/local
+
+* Build the source:
+
+        cd fiware-orion
+        make CPU_COUNT=n # n is what you want to give to -j option

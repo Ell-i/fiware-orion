@@ -52,6 +52,11 @@ fi
 
 fedora_distro=$(cat /etc/redhat-release 2> /dev/null | awk '{print $1}')
 
+#
+#  Mac OS X 10.12
+#
+darwin_distro=$(/usr/bin/sw_vers -productVersion 2> /dev/null)
+
 distro="Unknown_1.0"
 
 if [ "$ubuntu_distro" != "" ]
@@ -68,7 +73,13 @@ then
   distro=${fedora_distro}_${centos_distro}
 elif [ "$centos_distro" != "" ]
 then
-  distro=CentOS_$centos_distro 
+    distro=CentOS_$centos_distro
+elif [ "$darwin_distro" != "" ]
+then
+    distro="Darwin_$darwin_distro"
+    # Builtin echo on Darwin does not understand -n
+    /bin/echo -n $distro
+    exit 0
 fi
 
 echo -n $distro

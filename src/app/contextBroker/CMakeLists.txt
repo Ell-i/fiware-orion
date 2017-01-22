@@ -40,8 +40,10 @@ include_directories("${PROJECT_SOURCE_DIR}/src/lib")
 # ------------------------------------------------------------
 link_directories("/usr/local/lib/")
 link_directories("/usr/lib64/")
-link_directories("/usr/lib/x86_64-linux-gnu")
-
+IF(${DISTRO} MATCHES "Darwin_.*")
+ELSE()
+  link_directories("/usr/lib/x86_64-linux-gnu")
+ENDIF()
 
 
 # Executable declaration
@@ -75,6 +77,8 @@ ELSEIF(${DISTRO} STREQUAL "openSUSE_13.1")
   TARGET_LINK_LIBRARIES(contextBroker ${STATIC_LIBS} ${BOOST_MT} ${DYNAMIC_LIBS})
 ELSEIF(${DISTRO} STREQUAL "Fedora_20")  
   TARGET_LINK_LIBRARIES(contextBroker ${STATIC_LIBS} ${BOOST} ${DYNAMIC_LIBS})
+ELSEIF(${DISTRO} MATCHES "Darwin_.*")
+  TARGET_LINK_LIBRARIES(contextBroker ${STATIC_LIBS} ${BOOST_MT} ${DYNAMIC_LIBS})
 
 # Finally this is a "best effort" option to try to build on distros that don't have a
 # specify switch

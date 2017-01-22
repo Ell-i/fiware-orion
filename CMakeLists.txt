@@ -55,7 +55,11 @@ add_definitions(-fPIC)
 
 # Baseline compiler flags, any change here will affect all build types
 #set (CMAKE_CXX_FLAGS "-Wall -Wno-unknown-pragmas -D_LARGEFILE64_SOURCE -D_GNU_SOURCE -Werror")
-set (CMAKE_CXX_FLAGS "-Wall -Wno-unknown-pragmas -D_LARGEFILE64_SOURCE -D_GNU_SOURCE -Werror -fno-var-tracking-assignments")
+IF (${DISTRO} MATCHES "Darwin_.*")
+  set (CMAKE_CXX_FLAGS "-Wall -Wno-unknown-pragmas -D_LARGEFILE64_SOURCE -D_GNU_SOURCE -Werror -Wno-mismatched-tags -Wno-deprecated-declarations")
+ELSE()
+  set (CMAKE_CXX_FLAGS "-Wall -Wno-unknown-pragmas -D_LARGEFILE64_SOURCE -D_GNU_SOURCE -Werror -fno-var-tracking-assignments")
+ENDIF()
 
 #
 # Platform checks
@@ -172,6 +176,15 @@ SET (COMMON_STATIC_LIBS
     mongoclient.a
 )
 
+
+if (${DISTRO} MATCHES "Darwin_.*")
+SET (DYNAMIC_LIBS
+    curl
+    gnutls
+    pthread
+    gcrypt
+)
+else (NOT ${DISTRO} MATCHES "Darwin_.*")
 SET (DYNAMIC_LIBS
     curl
     gnutls
@@ -179,6 +192,7 @@ SET (DYNAMIC_LIBS
     gcrypt
     uuid
 )
+endif (${DISTRO} MATCHES "Darwin_.*")
 
 #
 # Enabling testing
@@ -201,12 +215,16 @@ include_directories("/usr/include")
 # Library directories
 #
 MESSAGE("Building for ${BUILD_ARCH}")
+if (${DISTRO} MATCHES "Darwin_.*")
+    link_directories("/usr/lib")
+else (NOT ${DISTRO} MATCHES "Darwin_.*")
 if ("${BUILD_ARCH}" STREQUAL "x86_64")
     link_directories("/usr/lib64")
 else (NOT "${BUILD_ARCH}" STREQUAL "x86_64")
     link_directories("/usr/lib")
 endif ("${BUILD_ARCH}" STREQUAL "x86_64")
 link_directories("/usr/lib/x86_64-linux-gnu")
+endif (${DISTRO} MATCHES "Darwin_.*")
 #
 # Enabling test harness
 #

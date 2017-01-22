@@ -93,7 +93,12 @@ static void correlatorGenerate(char* buffer)
 {
   uuid_t uuid;
 
+  // It would be better to #ifdef on some feature, not __APPLE__
+#ifdef __APPLE__
+  uuid_generate_time(uuid);
+#else
   uuid_generate_time_safe(uuid);
+#endif
   uuid_unparse_lower(uuid, buffer);
 }
 
